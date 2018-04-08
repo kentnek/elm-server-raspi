@@ -31,7 +31,7 @@ function writeLed(led, byte) {
 }
 
 function updateColor(rgb) {
-    mapObject(LED, (color, led) => writeLed(led, rgb[c]));
+    mapObject(LED, (color, led) => writeLed(led, rgb[color]));
 }
 
 module.exports = {
