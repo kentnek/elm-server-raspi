@@ -1,6 +1,6 @@
 module Update exposing (update)
 
--- import Debug exposing (log)
+import Debug exposing (log)
 import WebSocket exposing (send)
 import Json.Decode exposing (decodeString)
 
@@ -40,9 +40,8 @@ update action model =
         DragEnd _ ->
             ( { model | dragging = False }, Cmd.none )
 
-        SocketMessage message -> 
+        SocketMessage message ->
             case decodeString hslDecoder message of
                 Ok {h,s,l} -> ({model | h = h, s = s, l = l}, Cmd.none)
                 Err err -> (model, Cmd.none)
-
     
