@@ -25,6 +25,7 @@ app.ws.use(ws.routes()).use(ws.allowedMethods());
 
 raspi.init(() => {
     app.listen(2001);
+    raspi.updateColor(store.getColorAsRgb());
     console.log("Listening at :2001");
 });
 
