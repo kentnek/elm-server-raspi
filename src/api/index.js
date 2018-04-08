@@ -5,7 +5,9 @@ const websockify = require('koa-websocket');
 const app = websockify(new Koa());
 const ws = new Router();
 
-const raspi = require(NODE_ENV === "production" ? './raspi' : './raspi-mock');
+const isProduction = process.env.NODE_ENV === "production";
+
+const raspi = require(isProduction ? './raspi' : './raspi-mock');
 const store = require("./store");
 
 ws.get('/', (ctx, next) => {
@@ -20,8 +22,6 @@ ws.get('/hue', (ctx, next) => {
 });
 
 app.ws.use(ws.routes()).use(ws.allowedMethods());
-
-console.log()
 
 raspi.init(() => {
     app.listen(2001);
