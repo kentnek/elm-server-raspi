@@ -9,7 +9,8 @@
         "prebuild": "rimraf dist",
         "build": "webpack",
         "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install",
-        "api": "node src/api/index"
+        "api-dev": "node src/api/index",
+        "api": "NODE_ENV=production node src/api/index"
     },
     "dependencies": {
         "color-convert": "^1.9.1",
