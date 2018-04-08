@@ -1,6 +1,6 @@
 module Update exposing (update)
 
-import Debug exposing (log)
+-- import Debug exposing (log)
 import WebSocket exposing (send)
 import Json.Decode exposing (decodeString)
 
