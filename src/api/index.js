@@ -11,7 +11,6 @@ const raspi = require(isProduction ? './raspi' : './raspi-mock');
 const store = require("./store");
 
 ws.get('/', (ctx, next) => {
-    console.log("Client connected, sending color...");
     ctx.websocket.send(JSON.stringify(store.getColorAsHsl()));
 });
 

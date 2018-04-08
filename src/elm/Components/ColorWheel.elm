@@ -8,11 +8,14 @@ import Collage.Render exposing (..)
 
 import Html exposing (Html)
 
+import Json.Decode exposing (Decoder, field, float, map, map2)
+
 import Model exposing (Model, toColor)
 import Actions exposing (Action(..))
 
+
 wheelSize : number
-wheelSize = 500
+wheelSize = 300
 
 display : Model -> Html Action
 display model =
@@ -21,7 +24,7 @@ display model =
 
         outerRadius = wheelSize / 2
         innerRadius = outerRadius * 0.9
-        arrowRadius = outerRadius * 0.1
+        arrowRadius = outerRadius * 0.2
         arrowDistance = innerRadius - arrowRadius
 
         theta = model.h |> toFloat |> degrees
@@ -36,14 +39,35 @@ display model =
         boundingBox = rectangle w h |> filled (uniform black)
 
         origin = (w/2, h/2)
-        attachEvents x = 
+
+        attachEvents collage = 
             case model.dragging of 
-                True -> x |> onMouseUp DragEnd |> onMouseMove (DragAt origin)
-                False -> x 
+                True -> collage |> onUp DragEnd |> onMove (DragAt origin)
+                False -> collage 
 
     in stack [
-        arrow |> onMouseDown DragStart |> attachEvents,
+        arrow |> (onPointer "down") DragStart |> attachEvents,
         innerCircle |> attachEvents,
         outerCircle |> attachEvents,
         boundingBox |> attachEvents
     ] |> svg
+
+-- Touch events
+
+onPointer : String -> (Point -> msg) -> Collage msg -> Collage msg
+onPointer event msg = on ("pointer" ++ event) <| map msg offsetDecoder
+
+onDown : (Point -> msg) -> Collage msg -> Collage msg
+onDown = onPointer "down"
+
+onMove : (Point -> msg) -> Collage msg -> Collage msg
+onMove = onPointer "move"
+
+onUp : (Point -> msg) -> Collage msg -> Collage msg
+onUp = onPointer "up"
+
+offsetDecoder : Decoder Point
+offsetDecoder =
+    map2 (,)
+        (field "clientX" float)
+        (field "clientY" float)

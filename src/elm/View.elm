@@ -11,11 +11,10 @@ import Components.ColorWheel
 view : Model -> Html Action
 view model =
     div [
-        -- style [
-        --    ("backgroundColor", "black"),
-        --    ("color", "white"),
-        --    ("height", "100vh")
-        -- ]
+        style [
+            -- disable browsers scroll/pinch/... touch behaviors.
+            ("touch-action", "none") 
+        ]
     ] [   
         Components.ColorWheel.display model,
         br [] [],
@@ -24,7 +23,7 @@ view model =
             H.min "0", 
             H.max "360", 
             value <| toString model.h,
-            onInput HueSlider 
+            onInput (SetHue << stringToIntAction)
         ] [],
         br [] [],
         input [ 
@@ -32,6 +31,9 @@ view model =
             H.min "0", 
             H.max "100", 
             value <| toString model.l,
-            onInput LightSlider
+            onInput (SetLight << stringToIntAction)
         ] []
     ]
+
+stringToIntAction : String -> Int
+stringToIntAction string = Result.withDefault 0 <| String.toInt string
