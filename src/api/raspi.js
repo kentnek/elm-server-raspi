@@ -12,7 +12,7 @@ let LED = null;
 function init(cb) {
     raspi.init(() => {
         console.log("Raspi lib initialized.");
-        LED = mapObject(PIN, pin => new SoftPWM(pin));
+        LED = mapObject(PIN, (_, pin) => new SoftPWM(pin));
         cb();
     });
 }
