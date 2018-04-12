@@ -26,7 +26,7 @@ function setHue(hue) {
 
 function rotateLight() {
     let index = LightValues.indexOf(STORE.color.l);
-    STORE.color.l = LightValues[(l + 1) % LightValues.length];
+    STORE.color.l = LightValues[(index + 1) % LightValues.length];
 }
 
 module.exports = {
