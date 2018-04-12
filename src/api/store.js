@@ -12,7 +12,7 @@ function getColorAsHsl() {
 
 function getColorAsRgb() {
     const { color: { h, s, l } } = STORE;
-    const [r, g, b] = hsl.rgb(h, s, l);
+    const [r, g, b] = hsv.rgb(h, s, l);
     return { r, g, b }
 }
 
