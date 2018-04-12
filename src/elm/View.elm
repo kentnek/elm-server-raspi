@@ -6,7 +6,8 @@ import Html.Events exposing (on, onInput)
 
 import Model exposing (Model, toHex)
 import Actions exposing (Action(..))
-import Components.ColorWheel 
+import Components.ColorWheel as ColorWheel
+
 
 view : Model -> Html Action
 view model =
@@ -16,7 +17,7 @@ view model =
             ("touch-action", "none") 
         ]
     ] [   
-        Components.ColorWheel.display model,
+        ColorWheel.display model,
         br [] [],
         input [ 
             type_ "range", 

@@ -10,8 +10,32 @@ const isProduction = process.env.NODE_ENV === "production";
 const raspi = require(isProduction ? './raspi' : './raspi-mock');
 const store = require("./store");
 
+const EventEmitter = require('events');
+const buttonEventEmitter = new EventEmitter();
+
 ws.get('/', (ctx, next) => {
     ctx.websocket.send(JSON.stringify(store.getColorAsHsl()));
+
+    const callback = event => {
+        if (event === "push_button") {
+            store.rotateLight();
+        } else if (event === "rotary_increase") {
+
+        } else if (event === "rotary_decrease") {
+
+        }
+
+        raspi.updateColor(store.getColorAsRgb());
+    }
+
+    ctx.websocket.on('close', function (hue) {
+        store.setHue(parseInt(hue));
+        raspi.updateColor(store.getColorAsRgb());
+    });
+
+    buttonEventEmitter.on('event', () => {
+        console.log('an event occurred!');
+    });
 });
 
 ws.get('/hue', (ctx, next) => {
@@ -26,6 +50,9 @@ app.ws.use(ws.routes()).use(ws.allowedMethods());
 raspi.init(() => {
     app.listen(2001);
     raspi.updateColor(store.getColorAsRgb());
+
+    raspi.listen(event => buttonEventEmitter.emit("button", event));
+
     console.log("Listening at :2001");
 });
 

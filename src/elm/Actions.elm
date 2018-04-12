@@ -1,11 +1,27 @@
-module Actions exposing (Action(..))
+module Actions exposing (
+    Action(..), 
+    SocketMessage(..), 
+    socketMessageDecoder
+    )
 
 import Window exposing (Size)
 import Collage exposing (Point)
 
+import Json.Decode exposing (Decoder, oneOf, field, int, map, map3)
+
 type Action
-    = HueSlider String | LightSlider String
-    | SetHue Int | SetLight Int
+    = SetHue Int | SetLight Int
     | SocketMessage String
     | Resize Size
     | DragStart Point | DragAt Point Point | DragEnd Point
+
+type SocketMessage 
+    = Color Int Int Int -- h s l
+
+socketMessageDecoder : Decoder SocketMessage
+socketMessageDecoder = oneOf [
+    hslDecoder
+    ]
+
+hslDecoder : Decoder SocketMessage
+hslDecoder = map3 Color (field "h" int) (field "s" int) (field "l" int)
