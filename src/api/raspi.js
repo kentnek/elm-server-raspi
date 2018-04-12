@@ -35,7 +35,7 @@ function updateColor(rgb) {
     mapObject(LED, (color, led) => writeLed(led, rgb[color]));
 }
 
-function listenButtons(callback) {
+function listen(callback) {
     const pushButton = new DigitalInput('GPIO4');
     const rotaryA = new DigitalInput('GPIO23');
     const rotaryB = new DigitalInput('GPIO24');
@@ -65,5 +65,5 @@ function listenButtons(callback) {
 }
 
 module.exports = {
-    init, updateColor, listenButtons
+    init, updateColor, listen
 }
