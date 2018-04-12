@@ -16,25 +16,13 @@ const buttonEventEmitter = new EventEmitter();
 ws.get('/', (ctx, next) => {
     ctx.websocket.send(JSON.stringify(store.getColorAsHsl()));
 
-    const callback = event => {
-        if (event === "push_button") {
-            store.rotateLight();
-        } else if (event === "rotary_increase") {
-
-        } else if (event === "rotary_decrease") {
-
-        }
-
-        raspi.updateColor(store.getColorAsRgb());
-    }
-
     ctx.websocket.on('close', function (hue) {
         store.setHue(parseInt(hue));
         raspi.updateColor(store.getColorAsRgb());
     });
 
-    buttonEventEmitter.on('event', () => {
-        console.log('an event occurred!');
+    buttonEventEmitter.on('button', (event) => {
+        console.log(event);
     });
 });
 
@@ -51,7 +39,18 @@ raspi.init(() => {
     app.listen(2001);
     raspi.updateColor(store.getColorAsRgb());
 
-    raspi.listen(event => buttonEventEmitter.emit("button", event));
+    raspi.listen(event => {
+        if (event === "push_button") {
+            store.rotateLight();
+        } else if (event === "rotary_increase") {
+
+        } else if (event === "rotary_decrease") {
+
+        }
+
+        raspi.updateColor(store.getColorAsRgb());
+        buttonEventEmitter("button", event);
+    });
 
     console.log("Listening at :2001");
 });
