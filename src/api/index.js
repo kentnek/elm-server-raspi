@@ -49,7 +49,7 @@ raspi.init(() => {
         }
 
         raspi.updateColor(store.getColorAsRgb());
-        buttonEventEmitter("button", event);
+        buttonEventEmitter.emit("button", event);
     });
 
     console.log("Listening at :2001");
