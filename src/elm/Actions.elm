@@ -10,7 +10,7 @@ import Collage exposing (Point)
 import Json.Decode exposing (Decoder, oneOf, field, int, map, map3)
 
 type Action
-    = SetHue Int | SetLight Int
+    = SetHue Int | SetValue Int
     | SocketMessage String
     | Resize Size
     | DragStart Point | DragAt Point Point | DragEnd Point
@@ -20,8 +20,8 @@ type SocketMessage
 
 socketMessageDecoder : Decoder SocketMessage
 socketMessageDecoder = oneOf [
-    hslDecoder
+    hsvDecoder
     ]
 
-hslDecoder : Decoder SocketMessage
-hslDecoder = map3 Color (field "h" int) (field "s" int) (field "l" int)
+hsvDecoder : Decoder SocketMessage
+hsvDecoder = map3 Color (field "h" int) (field "s" int) (field "v" int)

@@ -13,10 +13,9 @@
         "api": "NODE_ENV=production node src/api/index"
     },
     "dependencies": {
-        "color-convert": "^1.9.1",
-        "koa": "^2.5.0",
-        "koa-router": "^7.4.0",
-        "koa-websocket": "^4.1.0",
+        "color-convert": "^1.9.1"
+    },
+    "optionalDependencies": {
         "raspi": "^4.0.0",
         "raspi-gpio": "^4.0.2",
         "raspi-pwm": "^4.0.2",

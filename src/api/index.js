@@ -1,9 +1,4 @@
-const Koa = require('koa');
-const Router = require('koa-router');
-const websockify = require('koa-websocket');
-
-const app = websockify(new Koa());
-const ws = new Router();
+const WebSocket = require('ws');
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -13,46 +8,53 @@ const store = require("./store");
 const EventEmitter = require('events');
 const buttonEventEmitter = new EventEmitter();
 
-ws.get('/', (ctx, next) => {
-    ctx.websocket.send(JSON.stringify(store.getColorAsHsl()));
+function onSocketConnection(wss, socket) {
+    socket.sendColor = () => socket.send(JSON.stringify(store.getColorAsHsv()));
 
-    ctx.websocket.on('close', function (hue) {
-        store.setHue(parseInt(hue));
+    socket.sendColor();
+
+    const eventCallback = (event) => {
+        socket.sendColor();
+    };
+
+    socket.on('close', function () {
+        buttonEventEmitter.removeListener('button', eventCallback);
+    });
+
+    socket.on('message', function (data) {
+        store.setHue(parseInt(data));
         raspi.updateColor(store.getColorAsRgb());
+
+        wss.clients.forEach((client) => {
+            if (client !== socket && client.readyState === WebSocket.OPEN) {
+                client.sendColor();
+            }
+        });
     });
 
-    buttonEventEmitter.on('button', (event) => {
-        console.log(event);
-    });
-});
+    buttonEventEmitter.on('button', eventCallback);
+}
 
-ws.get('/hue', (ctx, next) => {
-    ctx.websocket.on('message', function (hue) {
-        store.setHue(parseInt(hue));
-        raspi.updateColor(store.getColorAsRgb());
-    });
-});
-
-app.ws.use(ws.routes()).use(ws.allowedMethods());
 
 raspi.init(() => {
-    app.listen(2001);
+    const wss = new WebSocket.Server({ port: 2001 });
+    wss.on('connection', socket => onSocketConnection(wss, socket));
     raspi.updateColor(store.getColorAsRgb());
 
     raspi.listen(event => {
         if (event === "push_button") {
-            store.rotateLight();
+            store.rotateValue();
         } else if (event === "rotary_increase") {
-
+            store.addHue(2);
         } else if (event === "rotary_decrease") {
-
+            store.addHue(-2);
         }
 
         raspi.updateColor(store.getColorAsRgb());
         buttonEventEmitter.emit("button", event);
     });
 
-    console.log("Listening at :2001");
+    console.log("Socket listening at :2001");
 });
 
 

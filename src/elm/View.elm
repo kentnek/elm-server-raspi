@@ -4,7 +4,7 @@ import Html exposing (Html, div, text, input, br)
 import Html.Attributes as H exposing (..)
 import Html.Events exposing (on, onInput)
 
-import Model exposing (Model, toHex)
+import Model exposing (Model)
 import Actions exposing (Action(..))
 import Components.ColorWheel as ColorWheel
 
@@ -31,8 +31,8 @@ view model =
             type_ "range", 
             H.min "0", 
             H.max "100", 
-            value <| toString model.l,
-            onInput (SetLight << stringToIntAction)
+            value <| toString model.v,
+            onInput (SetValue << stringToIntAction)
         ] []
     ]
 

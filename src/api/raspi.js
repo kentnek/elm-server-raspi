@@ -3,17 +3,25 @@ const { SoftPWM } = require('raspi-soft-pwm');
 const { DigitalInput, LOW, HIGH } = require('raspi-gpio');
 
 const PIN = {
-    r: 'GPIO17',
-    g: 'GPIO27',
-    b: 'GPIO22',
+    LED: {
+        r: 'GPIO17',
+        g: 'GPIO27',
+        b: 'GPIO22'
+    },
+    BUTTONS: {
+        push: 'GPIO10',
+        rotaryA: 'GPIO9',
+        rotaryB: 'GPIO11'
+    }
 };
+
 
 let LED = null;
 
 function init(cb) {
     raspi.init(() => {
         console.log("Raspi lib initialized.");
-        LED = mapObject(PIN, (_, pin) => new SoftPWM(pin));
+        LED = mapObject(PIN.LED, (_, pin) => new SoftPWM(pin));
         cb();
     });
 }
@@ -36,9 +44,9 @@ function updateColor(rgb) {
 }
 
 function listen(callback) {
-    const pushButton = new DigitalInput('GPIO4');
-    const rotaryA = new DigitalInput('GPIO23');
-    const rotaryB = new DigitalInput('GPIO24');
+    const pushButton = new DigitalInput(PIN.BUTTONS.push);
+    const rotaryA = new DigitalInput(PIN.BUTTONS.rotaryA);
+    const rotaryB = new DigitalInput(PIN.BUTTONS.rotaryB);
 
     pushButton.on("change", value => {
         if (value === HIGH) callback("push_button");
@@ -52,16 +60,16 @@ function listen(callback) {
 
         // If the previous and the current state of outputA are different, 
         // a Pulse has occurred
-        if (currentA != prevA) {
+        if (prevA === -1 || currentA != prevA) {
             if (rotaryB.read() != currentA) {
-                callback("rotary-increase");
+                callback("rotary_decrease");
             } else {
-                callback("rotary-decrease");
+                callback("rotary_increase");
             }
         }
 
         prevA = currentA;
-    }, 10);
+    }, 1);
 }
 
 module.exports = {

@@ -1,18 +1,18 @@
-const { rgb, hsl } = require('color-convert');
+const { rgb, hsv } = require('color-convert');
 
 const STORE = {
-    color: { h: 100, s: 60, l: 100 }
+    color: { h: 100, s: 60, v: 100 }
 };
 
 const LightValues = [0, 30, 60, 100];
 
-function getColorAsHsl() {
+function getColorAsHsv() {
     return STORE.color;
 }
 
 function getColorAsRgb() {
-    const { color: { h, s, l } } = STORE;
-    const [r, g, b] = hsv.rgb(h, s, l);
+    const { color: { h, s, v } } = STORE;
+    const [r, g, b] = hsv.rgb(h, s, v);
     return { r, g, b }
 }
 
@@ -24,11 +24,17 @@ function setHue(hue) {
     STORE.color.h = hue;
 }
 
-function rotateLight() {
-    let index = LightValues.indexOf(STORE.color.l);
-    STORE.color.l = LightValues[(index + 1) % LightValues.length];
+function addHue(hue) {
+    const newValue = STORE.color.h + hue;
+    STORE.color.h = ((newValue % 360) + 360) % 360; // handle negative mod
+}
+
+
+function rotateValue() {
+    let index = LightValues.indexOf(STORE.color.v);
+    STORE.color.v = LightValues[(index + 1) % LightValues.length];
 }
 
 module.exports = {
-    getColorAsHsl, getColorAsRgb, setColor, setHue, rotateLight
+    getColorAsHsv, getColorAsRgb, setColor, setHue, rotateValue, addHue
 }

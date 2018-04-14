@@ -13,10 +13,10 @@ update : Action -> Model -> (Model, Cmd Action)
 update action model =
     case action of
         SetHue hue ->
-            ({ model | h = hue }, send (config.websocketUrl ++ "/hue") (toString hue))
+            ({ model | h = hue }, send config.websocketUrl (toString hue))
 
-        SetLight light ->
-            ({ model | l = light }, send (config.websocketUrl ++ "/light") (toString light))
+        SetValue value ->
+            ({ model | v = value }, Cmd.none)
             
         Resize size ->
             ( { model | windowSize = size }, Cmd.none )
@@ -34,6 +34,6 @@ update action model =
 
         SocketMessage stringMessage ->
             case decodeString socketMessageDecoder stringMessage of
-                Ok (Color h s l) -> ({model | h = h, s = s, l = l}, Cmd.none)
+                Ok (Color h s v) -> ({model | h = h, s = s, v = v}, Cmd.none)
                 Err err -> log err (model, Cmd.none)
     
