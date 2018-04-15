@@ -1,4 +1,4 @@
-module Actions exposing (
+module Ui.Actions exposing (
     Action(..), 
     SocketMessage(..), 
     socketMessageDecoder

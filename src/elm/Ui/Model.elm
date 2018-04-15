@@ -1,4 +1,4 @@
-module Model exposing (Model, initial)
+module Ui.Model exposing (Model, initial)
 
 import Color exposing (Color, rgb)
 import Window exposing (Size)

@@ -4,7 +4,8 @@
     "repository": "https://github.com/user/project.git",
     "license": "MIT",
     "source-directories": [
-        "src/elm"
+        "src/elm",
+        "node_modules/elm-web-server/src"
     ],
     "exposed-modules": [],
     "dependencies": {

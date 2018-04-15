@@ -1,12 +1,12 @@
-module Update exposing (update)
+module Ui.Update exposing (update)
 
 import Debug exposing (log)
 import WebSocket exposing (send)
 import Json.Decode exposing (decodeString)
 
-import Config exposing (config)
-import Model exposing (..)
-import Actions exposing (..)
+import Ui.Config exposing (config)
+import Ui.Model exposing (..)
+import Ui.Actions exposing (..)
 
 
 update : Action -> Model -> (Model, Cmd Action)

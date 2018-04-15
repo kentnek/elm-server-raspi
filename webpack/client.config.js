@@ -1,11 +1,9 @@
-var path = require('path');
-var webpack = require('webpack');
-var merge = require('webpack-merge');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-
+const path = require('path');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const prod = 'production';
 const dev = 'development';
@@ -16,14 +14,14 @@ const isDev = TARGET_ENV == dev;
 const isProd = TARGET_ENV == prod;
 
 // entry and output path/filename variables
-const entryPath = path.join(__dirname, 'src/static/index.js');
-const outputPath = path.join(__dirname, 'dist');
+const entryPath = path.join(__dirname, '../src/static/index.js');
+const outputPath = path.join(__dirname, '../dist');
 const outputFilename = isProd ? '[name]-[hash].js' : '[name].js'
 
 console.log('WEBPACK GO! Building for ' + TARGET_ENV);
 
 // common webpack config (valid for dev and prod)
-var commonConfig = {
+const commonConfig = {
     output: {
         path: outputPath,
         filename: `static/js/${outputFilename}`,
@@ -39,12 +37,13 @@ var commonConfig = {
             use: 'file-loader?publicPath=../../&name=static/css/[hash].[ext]'
         }]
     },
+    watchOptions: {
+        ignored: [
+            /node_modules/,
+            /elm-stuff/
+        ]
+    },
     plugins: [
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: [autoprefixer()]
-            }
-        }),
         new HtmlWebpackPlugin({
             template: 'src/static/index.html',
             inject: 'body',
@@ -56,6 +55,7 @@ var commonConfig = {
 // additional webpack settings for local env (when invoked by 'npm start')
 if (isDev === true) {
     module.exports = merge(commonConfig, {
+        mode: dev,
         entry: [
             'webpack-dev-server/client?http://localhost:2000',
             entryPath
@@ -67,12 +67,12 @@ if (isDev === true) {
             hot: true,
             port: 2000,
             host: '0.0.0.0',
-            proxy: {
-                '/api': {
-                    target: 'http://localhost:2001',
-                    secure: false
-                }
-            }
+            // proxy: {
+            //     '/api': {
+            //         target: 'http://localhost:2001',
+            //         secure: false
+            //     }
+            // }
         },
         module: {
             rules: [{
@@ -81,14 +81,14 @@ if (isDev === true) {
                 use: [{
                     loader: 'elm-webpack-loader',
                     options: {
-                        verbose: true,
-                        warn: true,
-                        debug: true
+                        // verbose: true,
+                        // warn: true,
+                        // debug: true
                     }
                 }]
             }, {
                 test: /\.sc?ss$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader']
             }]
         }
     });
@@ -107,7 +107,7 @@ if (isProd === true) {
                 test: /\.sc?ss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: ['css-loader', 'postcss-loader', 'sass-loader']
+                    use: ['css-loader', 'sass-loader']
                 })
             }]
         },

@@ -1,15 +1,15 @@
-module Main exposing (..)
+module Ui.Main exposing (..)
 
 import Html
 import Task exposing (Task)
 import Window exposing (resizes)
 import WebSocket exposing (listen)
 
-import Actions exposing (Action(..))
-import Model exposing (Model, initial)
-import Config exposing (config)
-import Update
-import View
+import Ui.Actions exposing (Action(..))
+import Ui.Model exposing (Model, initial)
+import Ui.Config exposing (config)
+import Ui.Update
+import Ui.View
 
 
 subscriptions : Model -> Sub Action
@@ -23,8 +23,8 @@ subscriptions model =
 main : Program Never Model Action
 main =
     Html.program { 
-        init = (Model.initial, Task.perform Resize Window.size), 
-        update = Update.update,
-        view = View.view, 
+        init = (Ui.Model.initial, Task.perform Resize Window.size), 
+        update = Ui.Update.update,
+        view = Ui.View.view, 
         subscriptions = subscriptions
     }
