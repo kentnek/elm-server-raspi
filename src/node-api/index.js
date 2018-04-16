@@ -1,8 +1,6 @@
 const WebSocket = require('ws');
 
-const isProduction = process.env.NODE_ENV === "production";
-
-const raspi = require(isProduction ? './raspi' : './raspi-mock');
+const raspi = require("./raspi");
 const store = require("./store");
 
 const EventEmitter = require('events');

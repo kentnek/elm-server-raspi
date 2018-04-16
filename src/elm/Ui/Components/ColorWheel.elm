@@ -11,7 +11,7 @@ import Html exposing (Html)
 
 import Ui.Model exposing (Model)
 import Ui.Actions exposing (Action(..))
-import Utils.Color exposing (hsvToRgb)
+import Utils.Color exposing (hsvToColor)
 
 
 wheelSize : number
@@ -32,7 +32,7 @@ display model =
         arrowX = arrowDistance * sin(theta)
         arrowY = arrowDistance * cos(theta)
 
-        color = hsvToRgb model.h model.s 60
+        color = hsvToColor model.h model.s 60
 
         arrow = stack [
             ngon 3 arrowRadius |> filled (uniform color) |> rotate -theta,

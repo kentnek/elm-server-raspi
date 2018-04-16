@@ -1,25 +1,32 @@
 module Api.Main exposing (main)
 
 import Platform exposing (Program)
-import Server.WebSocket as WebSocket
+import Api.Raspi as Raspi
 
 import Api.Model exposing (..)
 import Api.Messages exposing (Message(..))
 import Api.Update exposing (update)
+import Api.Subscriptions exposing (subscriptions)
 
-routeMessage : Result WebSocket.Error WebSocket.Msg -> Message
-routeMessage incoming =
-    case incoming of
-        Err (WebSocket.Error reason) -> InternalError reason
-        Ok msg -> WebSocketMsg msg
+import Task
 
-subscriptions : a -> Sub Message
-subscriptions model = WebSocket.listen routeMessage
+initPins : List (Cmd Message)
+initPins = [
+        Raspi.declarePwm "r" "GPIO17",
+        Raspi.declarePwm "g" "GPIO27",
+        Raspi.declarePwm "b" "GPIO22",
+        Raspi.declareButton "button" "GPIO10",
+        Raspi.declareRotary "hue" "GPIO9" "GPIO11",
+        perform Init
+    ]
+
+perform : msg -> Cmd msg
+perform msg = Task.succeed msg |> Task.perform identity
 
 main : Program Never Model Message
 main = 
-    Platform.program
-        { init = (initial, Cmd.none)
-        , update = update
-        , subscriptions = subscriptions
-        }
+    Platform.program { 
+        init = initial ! initPins,
+        update = update,
+        subscriptions = subscriptions
+    }

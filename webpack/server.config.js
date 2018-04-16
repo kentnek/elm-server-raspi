@@ -1,30 +1,44 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals')
 
-const srcRelativePath = "../src/elm/api"
-const srcPath = path.resolve(__dirname, srcRelativePath);
-const outputPath = path.resolve(__dirname, "../dist");
-
 module.exports = [{
     target: "node",
     mode: "development",
-    entry: path.resolve(srcPath, "./index.js"),
-    output: { path: outputPath, filename: "server.js" },
-    externals: [nodeExternals()], // Prevent webpack from bundling node_modules' code
+
+    entry: path.resolve(__dirname, "../src/elm/api/Native/index.js"),
+
+    output: {
+        path: path.resolve(__dirname, "../dist"),
+        filename: "elm-server.js"
+    },
+
+    externals: [
+        // Prevent webpack from bundling packages from node_modules
+        // and raspi-related modules
+        nodeExternalsIncluding("raspi", "raspi-gpio", "raspi-soft-pwm")
+    ],
+
     resolve: {
         extensions: [".elm", ".js"]
     },
+
     module: {
         rules: [{
             test: /.elm$/,
-            use: [{
-                loader: 'elm-webpack-loader',
-                options: {
-                    verbose: true,
-                    warn: true,
-                    debug: true
-                }
-            }]
+            use: 'elm-webpack-loader'
         }]
     }
 }]
+
+// Patch nodeExternals to include raspi-related modules
+// to prevent "Module not found: Error: Can't resolve 'raspi-X'" errors.
+function nodeExternalsIncluding(...modules) {
+    const extenals = nodeExternals();
+    return function (context, request, callback) {
+        if (modules.includes(request)) {
+            return callback(null, 'commonjs ' + request);
+        } else {
+            extenals(context, request, callback);
+        }
+    }
+}

@@ -3,8 +3,13 @@ module Api.Messages exposing (
     )
 
 import Server.WebSocket as WebSocket
+import Api.Raspi exposing (Event)
+import Time exposing (Time)
 
 type Message =
-    InternalError String
-    | WebSocketMsg WebSocket.Msg
+    Init 
+    | InternalError String
+    | Ws WebSocket.Msg
+    | Raspi Event
     | UpdateColor Int Int Int (Maybe WebSocket.Id) -- h, s, v and an optional source of change
+    | RainbowTick Time

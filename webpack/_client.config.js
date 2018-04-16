@@ -9,7 +9,7 @@ const prod = 'production';
 const dev = 'development';
 
 // determine build env
-const TARGET_ENV = process.env.npm_lifecycle_event === 'build' ? prod : dev;
+const TARGET_ENV = process.env.npm_lifecycle_event === 'build-ui' ? prod : dev;
 const isDev = TARGET_ENV == dev;
 const isProd = TARGET_ENV == prod;
 
@@ -18,7 +18,7 @@ const entryPath = path.join(__dirname, '../src/static/index.js');
 const outputPath = path.join(__dirname, '../dist');
 const outputFilename = isProd ? '[name]-[hash].js' : '[name].js'
 
-console.log('WEBPACK GO! Building for ' + TARGET_ENV);
+console.log('Building for ' + TARGET_ENV);
 
 // common webpack config (valid for dev and prod)
 const commonConfig = {
@@ -63,16 +63,11 @@ if (isDev === true) {
         devServer: {
             // serve index.html in place of 404 responses
             historyApiFallback: true,
-            contentBase: './src',
+            contentBase: path.join(__dirname, '../src'),
             hot: true,
+
             port: 2000,
-            host: '0.0.0.0',
-            // proxy: {
-            //     '/api': {
-            //         target: 'http://localhost:2001',
-            //         secure: false
-            //     }
-            // }
+            host: '0.0.0.0'
         },
         module: {
             rules: [{
@@ -97,6 +92,7 @@ if (isDev === true) {
 // additional webpack settings for prod env (when invoked via 'npm run build')
 if (isProd === true) {
     module.exports = merge(commonConfig, {
+        mode: prod,
         entry: entryPath,
         module: {
             rules: [{
@@ -112,26 +108,28 @@ if (isProd === true) {
             }]
         },
         plugins: [
+            // extract CSS into a separate file
             new ExtractTextPlugin({
-                filename: 'static/css/[name]-[hash].css',
+                filename: 'static/css/[name]-[contenthash].css',
                 allChunks: true,
             }),
+
             new CopyWebpackPlugin([{
-                from: 'src/static/img/',
+                from: './src/static/img/',
                 to: 'static/img/'
             }, {
-                from: 'src/favicon.ico'
+                from: '../src/favicon.ico'
             }]),
 
-            // extract CSS into a separate file
-            // minify & mangle JS/CSS
-            new webpack.optimize.UglifyJsPlugin({
-                minimize: true,
-                compressor: {
-                    warnings: false
-                }
-                // mangle:  true
-            })
+
+            // // minify & mangle JS/CSS
+            // new webpack.optimize.UglifyJsPlugin({
+            //     minimize: true,
+            //     compressor: {
+            //         warnings: false
+            //     }
+            //     // mangle:  true
+            // })
         ]
     });
 }

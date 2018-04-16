@@ -4,7 +4,11 @@ import Server.WebSocket as WebSocket
 
 import Api.Model exposing (..)
 import Api.Messages exposing (Message(..))
+import Api.Raspi exposing (..)
 
+import Utils.Color exposing (hsvToColor)
+
+-- Broadcast a message to all clients, except for the sender (if present)
 broadcast : String -> Maybe WebSocket.Id -> List WebSocket.Id -> Cmd msg
 broadcast message sender clients =
     let targets = 
@@ -13,31 +17,53 @@ broadcast message sender clients =
             Just s -> filterClients clients s 
     in Cmd.batch <| List.map (\c -> WebSocket.send message c) clients
 
-update : Message -> Model -> (Model, Cmd msg)
-update msg model =
+update : Message -> Model -> (Model, Cmd Message)
+update msg ({h, s, v} as model) =
     case msg of
-        InternalError reason ->
-            let _ = Debug.log "An internal Error Occoured" reason
-            in (model, Cmd.none)
+        Init -> -- Update LED color on init
+            (model, writeColor <| hsvToColor h s v)
 
-        WebSocketMsg (WebSocket.Connected id) -> (
-            addClient model id, -- append new client
+        Ws (WebSocket.Connected id) -> ( -- new connected client
+            addClient model id, -- append client
             WebSocket.send (currentColorJson model) id -- send current color to new client
         )
 
-        WebSocketMsg (WebSocket.Disconnected id) -> (
+        Ws (WebSocket.Disconnected id) -> ( -- a client disconnected
             removeClient model id, 
             Cmd.none
         )
 
-        WebSocketMsg (WebSocket.Message id hueString) -> 
-            let {s, v} = model
-                -- retrieve the new hue
-                newH = Result.withDefault 0 <| String.toInt hueString
-            -- then propagate to UpdateColor
+        Ws (WebSocket.Message id hueString) -> -- receives new hue from client            
+            let newH = Result.withDefault 0 <| String.toInt hueString
             in model |> update (UpdateColor newH s v (Just id))
 
-        UpdateColor h s v src -> (
-            { model | h = h, s = s, v = v },
-            broadcast (currentColorJson model) src model.clients
-        )
+        Raspi (Rotary "hue" event) -> -- physical knob is rotated
+            if (not model.rainbow) then
+                let delta = if event == Increment then 2 else -2
+                    newH = (h + delta) % 360
+                in model |> update (UpdateColor newH s v Nothing)
+            else (model, Cmd.none)
+
+        -- Raspi (Button "button" value) -> 
+        --     let _ = Debug.log "button" value
+        --     in (model, Cmd.none)
+
+        Raspi (Button "button" True) -> -- physical button is pressed
+            ({ model | rainbow = not model.rainbow }, Cmd.none)
+
+        RainbowTick _ -> -- Rainbow mode, onTick
+            model |> update (UpdateColor ((h + 2) % 360) s v Nothing)
+           
+        UpdateColor h s v src -> -- request to update color
+            { model | h = h, s = s, v = v } ! [
+                -- write color to LEDs
+                writeColor <| hsvToColor h s v,
+                -- broadcast to all clients, except src of request
+                broadcast (currentColorJson model) src model.clients 
+            ]
+
+        InternalError reason ->
+            let _ = Debug.log "Internal error" reason
+            in (model, Cmd.none)
+
+        _ -> (model, Cmd.none)

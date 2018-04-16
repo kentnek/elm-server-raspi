@@ -11,14 +11,12 @@ import Ui.Config exposing (config)
 import Ui.Update
 import Ui.View
 
-
 subscriptions : Model -> Sub Action
 subscriptions model = 
     Sub.batch [
         resizes Resize,
         listen config.websocketUrl SocketMessage
     ]
-
 
 main : Program Never Model Action
 main =

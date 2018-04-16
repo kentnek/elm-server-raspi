@@ -6,7 +6,7 @@ const WebsocketServer = new Ws.Server({ port: PORT });
 
 const Raspi = require("./raspi");
 
-const App = require("./Main");
+const App = require("../Main");
 const worker = App.Api.Main.worker();
 
 Ews.attachMessageListener(worker, WebsocketServer);

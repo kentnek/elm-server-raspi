@@ -1,9 +1,9 @@
-module Utils.Color exposing (hsvToRgb)
+module Utils.Color exposing (hsvToColor)
 
 import Color exposing (Color, rgb)
 
-hsvToRgb : Int -> Int -> Int -> Color
-hsvToRgb hue sat value = 
+hsvToColor : Int -> Int -> Int -> Color
+hsvToColor hue sat value = 
     let h = (toFloat hue) / 60
         i = floor h |> toFloat
         s = (toFloat sat) / 100
