@@ -9,7 +9,7 @@ module.exports = {
     },
 
     output: {
-        path: path.resolve(__dirname, '../dist'),
+        path: path.resolve(__dirname, '../dist/ui'),
         filename: `static/js/[name].bundle.js`,
     },
 
@@ -29,7 +29,7 @@ module.exports = {
     },
 
     plugins: [
-        new CleanWebpackPlugin("dist", {
+        new CleanWebpackPlugin("dist/ui", {
             root: path.join(__dirname, '..'),
         }),
 

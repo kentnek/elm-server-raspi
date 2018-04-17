@@ -9,10 +9,11 @@
         "build": "yarn ui:build && yarn api:build",
         "ui:start": "webpack-dev-server --hot --inline --config webpack/client.dev.js",
         "ui:build": "webpack --config webpack/client.prod.js",
+        "ui:deploy": "yarn ui:build && scp -r dist/ui/* pi@raspi.local:/var/www/html/elm",
         "api:js": "node src/node-api/index",
         "api:build": "webpack --config webpack/server.config.js",
         "api:elm": "node dist/elm-server.js",
-        "api:publish": "yarn api:build && scp dist/elm-server.js pi@raspi.local:~/elm-server-raspi/dist/elm-server.js"
+        "api:deploy": "yarn api:build && scp dist/api/elm-server.js pi@raspi.local:~/elm-server-raspi/dist/elm-server.js"
     },
     "dependencies": {
         "bufferutil": "^3.0.4",

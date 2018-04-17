@@ -8,7 +8,7 @@ module.exports = [{
     entry: path.resolve(__dirname, "../src/elm/Api/index.js"),
 
     output: {
-        path: path.resolve(__dirname, "../dist"),
+        path: path.resolve(__dirname, "../dist/api"),
         filename: "elm-server.js"
     },
 
