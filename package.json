@@ -1,6 +1,6 @@
 {
-    "name": "elm-rgb-led",
-    "description": "Elm app that controls a RGB LED",
+    "name": "elm-server-raspi",
+    "description": "A client and server written both in Elm, to control a Rotary Encoder + RGB via Raspberry Pi.",
     "version": "0.1",
     "license": "MIT",
     "author": "Kent",
@@ -12,14 +12,12 @@
         "api:js": "node src/node-api/index",
         "api:build": "webpack --config webpack/server.config.js",
         "api:elm": "node dist/elm-server.js",
-        "api:publish": "yarn api:build && scp dist/elm-server.js pi@raspi.local:~/node/elm-raspi-rgb/dist/elm-server.js"
+        "api:publish": "yarn api:build && scp dist/elm-server.js pi@raspi.local:~/elm-server-raspi/dist/elm-server.js"
     },
     "dependencies": {
         "bufferutil": "^3.0.4",
-        "clean-webpack-plugin": "^0.1.19",
         "color-convert": "^1.9.1",
         "elm-web-server": "^4.0.0",
-        "node-sass": "^4.8.3",
         "utf-8-validate": "^4.0.1",
         "ws": "^5.1.1"
     },
@@ -31,12 +29,14 @@
     },
     "devDependencies": {
         "bootstrap-sass": "^3.3.7",
+        "clean-webpack-plugin": "^0.1.19",
         "css-loader": "^0.28.11",
         "elm": "^0.18.0",
         "elm-webpack-loader": "^4.3.0",
         "file-loader": "^1.1.11",
         "html-webpack-plugin": "^3.2.0",
         "mini-css-extract-plugin": "^0.4.0",
+        "node-sass": "^4.8.3",
         "optimize-css-assets-webpack-plugin": "^4.0.0",
         "sass-loader": "^7.0.1",
         "style-loader": "^0.20.3",
