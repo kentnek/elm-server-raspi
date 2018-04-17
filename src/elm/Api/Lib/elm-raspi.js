@@ -6,11 +6,11 @@ const OutputDeviceMap = new Map();
 
 function attachMessageListener(worker) {
     if (!worker || !worker.ports) {
-        throw Error("Invalid configuration - Ensure you are passing an instantiated Elm-worker to 'attachMessageListener'.")
+        throw Error("worker must be an Elm worker.")
     }
 
     if (!worker.ports.toRaspi || !worker.ports.fromRaspi) {
-        throw Error("Invalid configuration - Ensure the worker you are passing to 'attachMessageListener' is utilizing the 'Api.Raspi'-module.")
+        throw Error("The provided Elm worker does not expose fromRaspi and toRaspi ports.")
     }
 
     raspi.init(() => {

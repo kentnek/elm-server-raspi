@@ -9,7 +9,7 @@
         "build": "yarn ui:build && yarn api:build",
         "ui:start": "webpack-dev-server --hot --inline --config webpack/client.dev.js",
         "ui:build": "webpack --config webpack/client.prod.js",
-        "ui:deploy": "yarn ui:build && scp -r dist/ui/* pi@raspi.local:/var/www/html/elm",
+        "ui:deploy": "yarn ui:build && scp -r dist/ui/* pi@raspi.local:/var/www/html/",
         "api:js": "node src/node-api/index",
         "api:build": "webpack --config webpack/server.config.js",
         "api:elm": "node dist/elm-server.js",

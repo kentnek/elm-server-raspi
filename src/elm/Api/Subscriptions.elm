@@ -23,7 +23,7 @@ subscriptions model =
         WebSocket.listen <| convertResult convertWsError Ws,
         RaspberryPi.listen <| convertResult InternalError Raspi,
 
-        -- Rainbow mode! increase hue every 20ms
+        -- Rainbow mode! change hue every 20ms
         if model.rainbow then 
             Time.every (20 * millisecond) RainbowTick
         else

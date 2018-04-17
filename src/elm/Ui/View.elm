@@ -30,17 +30,17 @@ view model =
             h1 [] [text "Elm IoT Demo"],
             h3 [] [
                 div [ style [ ("margin-bottom", "8px") ] ] [
-                    text "connect to ",
-                    span [ class "code" ] [text "Elm-IoT-Demo"]
+                    text "wifi: ",
+                    span [ class "code" ] [text "notNUS"]
+                ],
+                div [ style [ ("margin-bottom", "8px") ] ] [
+                    text "pass: ",
+                    span [ class "code" ] [text "helloelm"]
                 ],
                 div [] [
-                    text "go to ",
+                    text "url: ",
                     span [ class "code" ] [text model.hostname]
                 ]
             ]
         ]
-
     ]
-
-stringToIntAction : String -> Int
-stringToIntAction string = Result.withDefault 0 <| String.toInt string
