@@ -45,9 +45,9 @@ function declare(fromRaspi, { type, name, ...params }) {
 
         pushButton.on("change", value => {
             const currentTime = Date.now();
-            // Software debounce: 50ms
-            if (currentTime - prevTime > 50) {
-                fromRaspi.send({ button: name, value: value === HIGH });
+            // Software debounce: 100ms
+            if (currentTime - prevTime > 100) {
+                fromRaspi.send({ button: name, value: pushButton.read() === HIGH });
             }
             prevTime = currentTime;
         });
