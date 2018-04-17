@@ -9,12 +9,13 @@ type alias Model = {
     v: Int, 
     windowSize: Size,
     dragging: Bool,
-    wsUrl: String
+    wsUrl: String,
+    hostname: String
 }
 
 initial : Model
 initial = { 
     h = 0, s = 0, v = 50, 
     windowSize = Size 0 0, dragging = False,
-    wsUrl = ""
+    wsUrl = "", hostname = ""
     } 

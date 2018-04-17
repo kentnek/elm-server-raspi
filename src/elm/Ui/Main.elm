@@ -19,8 +19,8 @@ subscriptions model =
     ]
 
 injectConfig : Config -> (Model, Cmd Action)
-injectConfig { wsUrl } = (
-    { initial | wsUrl = wsUrl },
+injectConfig { wsUrl, hostname } = (
+    { initial | wsUrl = wsUrl, hostname = hostname },
     Task.perform Resize Window.size
     )
     

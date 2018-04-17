@@ -4,9 +4,12 @@ require('./styles/main.scss');
 // inject bundled Elm app into div#main
 var Elm = require('../elm/ui/Main');
 
-console.log("Websocket Url = " + WEBSOCKET_URL);
+// console.log("Websocket Url = " + WEBSOCKET_URL);
 
 Elm.Ui.Main.embed(
     document.getElementById('main'),
-    { wsUrl: WEBSOCKET_URL }
+    {
+        hostname: location.host + location.pathname,
+        wsUrl: WEBSOCKET_URL
+    }
 );

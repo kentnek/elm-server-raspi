@@ -12,23 +12,31 @@ view : Model -> Html Action
 view model =
     div [
         style [
-            -- disable browsers scroll/pinch/... touch behaviors.
-            ("touch-action", "none"),
             ("background", "black"),
             ("height", "100vh"),
             ("color", "white")
         ]
     ] [   
-        ColorWheel.display model,
+        div [
+            -- disable browsers scroll/pinch/... touch behaviors.
+            style [ ("touch-action", "none") ]
+        ] [ ColorWheel.display model ],
+        
         div [
             style [
                ("text-align", "center")
             ]
         ] [
             h1 [] [text "Elm IoT Demo"],
-            h2 [] [
-                text "Connect to ",
-                span [ class "code" ] [text "Elm-IoT-Demo"]
+            h3 [] [
+                div [ style [ ("margin-bottom", "8px") ] ] [
+                    text "connect to ",
+                    span [ class "code" ] [text "Elm-IoT-Demo"]
+                ],
+                div [] [
+                    text "go to ",
+                    span [ class "code" ] [text model.hostname]
+                ]
             ]
         ]
 

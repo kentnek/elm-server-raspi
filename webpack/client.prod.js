@@ -3,10 +3,10 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const DefinePlugin = require('webpack').DefinePlugin;
 
 const merge = require('webpack-merge');
 const common = require('./client.common.js');
-
 
 module.exports = merge(common, {
     mode: "production",
@@ -32,7 +32,7 @@ module.exports = merge(common, {
         }),
 
         new DefinePlugin({
-            WEBSOCKET_URL: "ws://localhost:2002"
+            WEBSOCKET_URL: "'ws://' + location.host + ':2002'"
         })
     ],
 

@@ -1,8 +1,8 @@
 const path = require('path');
-const merge = require('webpack-merge');
-
-const common = require('./client.common.js');
 const DefinePlugin = require('webpack').DefinePlugin;
+
+const merge = require('webpack-merge');
+const common = require('./client.common.js');
 
 module.exports = merge(common, {
     mode: "development",
@@ -46,7 +46,7 @@ module.exports = merge(common, {
 
     plugins: [
         new DefinePlugin({
-            WEBSOCKET_URL: "ws://192.168.50.47:2002"
+            WEBSOCKET_URL: JSON.stringify("ws://192.168.50.47:2002")
         })
     ]
 
