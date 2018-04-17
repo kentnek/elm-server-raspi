@@ -1,4 +1,4 @@
-port module Api.Raspi exposing (
+port module Api.Lib.RaspberryPi exposing (
     Event(..), RotaryMsg(..),
     listen,
     declarePwm, writePwm,

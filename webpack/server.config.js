@@ -5,7 +5,7 @@ module.exports = [{
     target: "node",
     mode: "development",
 
-    entry: path.resolve(__dirname, "../src/elm/api/Native/index.js"),
+    entry: path.resolve(__dirname, "../src/elm/Api/index.js"),
 
     output: {
         path: path.resolve(__dirname, "../dist"),

@@ -1,21 +1,14 @@
 module Api.Update exposing (update)
 
 import Server.WebSocket as WebSocket
+import Color exposing (Color, toRgb)
 
 import Api.Model exposing (..)
 import Api.Messages exposing (Message(..))
-import Api.Raspi exposing (..)
+import Api.Lib.RaspberryPi exposing (..)
 
 import Utils.Color exposing (hsvToColor)
 
--- Broadcast a message to all clients, except for the sender (if present)
-broadcast : String -> Maybe WebSocket.Id -> List WebSocket.Id -> Cmd msg
-broadcast message sender clients =
-    let targets = 
-        case sender of
-            Nothing -> clients
-            Just s -> filterClients clients s 
-    in Cmd.batch <| List.map (\c -> WebSocket.send message c) clients
 
 update : Message -> Model -> (Model, Cmd Message)
 update msg ({h, s, v} as model) =
@@ -67,3 +60,28 @@ update msg ({h, s, v} as model) =
             in (model, Cmd.none)
 
         _ -> (model, Cmd.none)
+
+-- Broadcast a message to all clients, except for the sender (if present)
+broadcast : String -> Maybe WebSocket.Id -> List WebSocket.Id -> Cmd msg
+broadcast message sender clients =
+    let targets = 
+        case sender of
+            Nothing -> clients
+            Just s -> filterClients clients s 
+    in Cmd.batch <| List.map (\c -> WebSocket.send message c) clients
+
+-- Update color channel with value byte
+writeColorChannel : String -> Int -> Cmd msg 
+writeColorChannel name byte = writePwm name (1 - (toFloat byte) / 255)
+
+-- Update all 3 color channels, red, green & blue
+writeColor : Color -> Cmd msg 
+writeColor color = 
+    let {red, green, blue} = color |> toRgb
+    in Cmd.batch [
+        writeColorChannel "r" red,
+        writeColorChannel "g" green,
+        writeColorChannel "b" blue
+    ]
+    
+

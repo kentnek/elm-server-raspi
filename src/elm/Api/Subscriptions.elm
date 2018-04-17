@@ -1,7 +1,7 @@
 module Api.Subscriptions exposing (subscriptions)
 
 import Server.WebSocket as WebSocket
-import Api.Raspi as RaspberryPi
+import Api.Lib.RaspberryPi as RaspberryPi
 import Time exposing (..)
 
 import Api.Model exposing (Model)

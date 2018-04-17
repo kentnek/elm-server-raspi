@@ -8,11 +8,13 @@ type alias Model = {
     s: Int, 
     v: Int, 
     windowSize: Size,
-    dragging: Bool
+    dragging: Bool,
+    wsUrl: String
 }
 
 initial : Model
 initial = { 
     h = 0, s = 0, v = 50, 
-    windowSize = Size 0 0, dragging = False
+    windowSize = Size 0 0, dragging = False,
+    wsUrl = ""
     } 

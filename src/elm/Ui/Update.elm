@@ -4,7 +4,6 @@ import Debug exposing (log)
 import WebSocket exposing (send)
 import Json.Decode exposing (decodeString)
 
-import Ui.Config exposing (config)
 import Ui.Model exposing (..)
 import Ui.Actions exposing (..)
 
@@ -13,7 +12,7 @@ update : Action -> Model -> (Model, Cmd Action)
 update action model =
     case action of
         SetHue hue ->
-            ({ model | h = hue }, send config.websocketUrl (toString hue))
+            ({ model | h = hue }, send model.wsUrl (toString hue))
 
         SetValue value ->
             ({ model | v = value }, Cmd.none)

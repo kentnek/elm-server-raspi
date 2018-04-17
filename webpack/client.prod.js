@@ -16,7 +16,6 @@ module.exports = merge(common, {
             {
                 test: /\.elm$/,
                 exclude: [/elm-stuff/, /node_modules/],
-                // This is what you need in your own work
                 use: "elm-webpack-loader"
             },
             {
@@ -30,6 +29,10 @@ module.exports = merge(common, {
         new MiniCssExtractPlugin({
             filename: "static/css/[name].css",
             chunkFilename: "[id].css"
+        }),
+
+        new DefinePlugin({
+            WEBSOCKET_URL: "ws://localhost:2002"
         })
     ],
 

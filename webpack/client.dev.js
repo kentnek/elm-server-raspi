@@ -2,6 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 
 const common = require('./client.common.js');
+const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = merge(common, {
     mode: "development",
@@ -11,7 +12,6 @@ module.exports = merge(common, {
             {
                 test: /\.elm$/,
                 exclude: [/elm-stuff/, /node_modules/],
-                // This is what you need in your own work
                 use: [{
                     loader: "elm-webpack-loader",
                     options: {
@@ -42,5 +42,12 @@ module.exports = merge(common, {
             /node_modules/,
             /elm-stuff/
         ]
-    }
+    },
+
+    plugins: [
+        new DefinePlugin({
+            WEBSOCKET_URL: "ws://192.168.50.47:2002"
+        })
+    ]
+
 });

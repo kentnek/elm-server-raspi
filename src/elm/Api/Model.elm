@@ -1,13 +1,11 @@
 module Api.Model exposing (
-    Model, initial, addClient, removeClient, filterClients,
-    currentColorJson, writeColor
+    Model, initial, 
+    addClient, removeClient, filterClients,
+    currentColorJson
     )
 
 import Json.Encode exposing (..)
 import Server.WebSocket as WebSocket
-import Api.Raspi as Raspi
-
-import Color exposing (Color, toRgb)
 
 type alias Model = { 
     clients: List WebSocket.Id,
@@ -35,16 +33,3 @@ removeClient model toRemove =
 currentColorJson : Model -> String 
 currentColorJson {h, s, v} = encode 0 
     <| object [ ("h", int h), ("s", int s), ("v", int v) ]
-
-writeColorChannel : String -> Int -> Cmd msg 
-writeColorChannel name byte = Raspi.writePwm name (1 - (toFloat byte) / 255)
-
-writeColor : Color -> Cmd msg 
-writeColor color = 
-    let {red, green, blue} = color |> toRgb
-    in Cmd.batch [
-        writeColorChannel "r" red,
-        writeColorChannel "g" green,
-        writeColorChannel "b" blue
-    ]
-    

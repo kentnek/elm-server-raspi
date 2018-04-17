@@ -1,14 +1,14 @@
 module Api.Main exposing (main)
 
 import Platform exposing (Program)
-import Api.Raspi as Raspi
+import Task
+import Api.Lib.RaspberryPi as Raspi
 
-import Api.Model exposing (..)
-import Api.Messages exposing (Message(..))
+import Api.Model exposing (Model, initial)
+import Api.Messages exposing (Message(Init))
 import Api.Update exposing (update)
 import Api.Subscriptions exposing (subscriptions)
 
-import Task
 
 initPins : List (Cmd Message)
 initPins = [

@@ -1,9 +1,7 @@
-module Api.Messages exposing (
-    Message(..)
-    )
+module Api.Messages exposing (Message(..))
 
 import Server.WebSocket as WebSocket
-import Api.Raspi exposing (Event)
+import Api.Lib.RaspberryPi exposing (Event)
 import Time exposing (Time)
 
 type Message =
