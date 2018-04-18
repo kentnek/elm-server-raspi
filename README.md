@@ -1,14 +1,17 @@
 # elm-server-raspi
 
-One Paragraph of project description goes here
+A demo of an Internet-of-Things application, where both the frontend and backend are written in Elm.
+
+The server, to be installed on a Raspberry Pi, controls a SparkFun RGB Rotary Encoder.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a Raspberry Pi.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+1. Node.js (latest version)
+2. Yarn (as a dependency manager, rather than NPM)
 
 ```
 Give examples
@@ -16,65 +19,23 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+1. Clone this project to a folder on your local machine, e.g. `~/elm-server-raspi`
+2. Inside the folder, do `yarn install --ignore-optional` to install necessary dependencies
+(except for those specific to Raspberry Pi).
+3. Update the server's Websocket url in `/webpack/client.dev.js`.
+4. To run the client locally with `webpack-dev-server`, do `yarn ui:start`. The client will be available at `localhost:2000`.
+5. To build a live compressed version of the client, do `yarn ui:build`. The built client can be found in `dist/ui`.
+6. To compile the Elm server to JavaScript, do `yarn api:build`. The build server can be found in `dist/api/elm-server.js`.
 
 ## Deployment
+1. The scripts in `package.json` assumes that the Raspberry Pi is available in the same network at `pi@raspi`.
+2. Do `yarn ui:deploy` to build the client and deploy it in `/var/www/html` on the Raspberry Pi.
+3. Do `yarn api:deploy` to build the Elm server into `elm-server.js` and deploy to the Raspberry Pi.
+4. On the Raspberry Pi, run `sudo node elm-server.js` (`sudo` is required) to start the server.
 
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
@@ -82,6 +43,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+
