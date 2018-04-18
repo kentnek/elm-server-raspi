@@ -10,12 +10,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-1. Node.js (latest version)
-2. Yarn (as a dependency manager, rather than NPM)
-
-```
-Give examples
-```
+- Node.js (latest version)
+- Yarn (as a dependency manager, rather than NPM)
 
 ### Installing
 
@@ -34,13 +30,12 @@ Give examples
 4. On the Raspberry Pi, run `sudo node elm-server.js` (`sudo` is required) to start the server.
 
 
-## Built With
-
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
-
+- [elm-collage](https://github.com/timjs/elm-collage/) - Elm vector graphics library
+- [elm-web-server](https://github.com/opvasger/elm-web-server/) - An API with Node.js-bindings for Elm WebSocket/HTTP-servers
+- [elm-webpack-loader](https://github.com/elm-community/elm-webpack-loader) - Webpack loader for the Elm language
 
